@@ -121,12 +121,15 @@ def main():
     st.header("🎴 最近5筆抽籤紀錄")
     draw_log = load_draw_log()
     for i, entry in enumerate(draw_log):
-        st.write(f"第 {i+1} 次抽籤：")
-        for box_title, picks in entry["result"].items():
-            st.write(f"- **{box_title}**: {', '.join(picks) if picks else '未抽取'}")
-        st.write("推薦標題： " + ", ".join(entry["titles"]))
-        st.markdown("---")
+    st.write(f"第 {i+1} 次抽籤：")
+    for box_title, picks in entry["result"].items():
+        st.write(f"- **{box_title}**: {', '.join(picks) if picks else '未抽取'}")
+    titles = entry.get("titles", [])  # 用 get() 預防沒有 titles
+    st.write("推薦標題： " + ", ".join(titles))
+    st.markdown("---")
+
 
 if __name__ == "__main__":
     init_boxes(st.session_state.num_boxes)
     main()
+
