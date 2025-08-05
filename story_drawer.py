@@ -5,14 +5,12 @@ import os
 
 st.set_page_config(page_title="靈感抽籤機", layout="wide")
 
-# 最大籤盒數量
 MAX_BOXES = 15
 
 # 預設籤盒數量
 if "num_boxes" not in st.session_state:
     st.session_state.num_boxes = 5
 
-# 載入抽籤紀錄（存在本地JSON）
 def load_draw_log():
     if os.path.exists("draw_log.json"):
         with open("draw_log.json", "r", encoding="utf-8") as f:
@@ -24,7 +22,6 @@ def save_draw_log(log):
     with open("draw_log.json", "w", encoding="utf-8") as f:
         json.dump(log, f, ensure_ascii=False, indent=2)
 
-# 初始化籤盒資料結構
 def init_boxes(n):
     if "boxes" not in st.session_state or len(st.session_state.boxes) != n:
         st.session_state.boxes = []
@@ -35,7 +32,6 @@ def init_boxes(n):
                 "draw_count": 1
             })
 
-# 顯示輸入區塊
 def render_input_area():
     st.header("自訂抽籤籤盒與抽取數量")
     num = st.number_input(
@@ -121,15 +117,13 @@ def main():
     st.header("🎴 最近5筆抽籤紀錄")
     draw_log = load_draw_log()
     for i, entry in enumerate(draw_log):
-    st.write(f"第 {i+1} 次抽籤：")
-    for box_title, picks in entry["result"].items():
-        st.write(f"- **{box_title}**: {', '.join(picks) if picks else '未抽取'}")
-    titles = entry.get("titles", [])  # 用 get() 預防沒有 titles
-    st.write("推薦標題： " + ", ".join(titles))
-    st.markdown("---")
-
+        st.write(f"第 {i+1} 次抽籤：")
+        for box_title, picks in entry["result"].items():
+            st.write(f"- **{box_title}**: {', '.join(picks) if picks else '未抽取'}")
+        titles = entry.get("titles", [])
+        st.write("推薦標題： " + ", ".join(titles))
+        st.markdown("---")
 
 if __name__ == "__main__":
     init_boxes(st.session_state.num_boxes)
     main()
-
